@@ -3,12 +3,11 @@ name: Deploy Node.js app to Azure WebApp
 on:
   push:
     branches:
-      - main   # غيريها لو تنشرين من فرع آخر
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -16,21 +15,17 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'   # أو النسخة اللي يشتغل عليها مشروعك
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build project (اختياري)
+      - name: Build project
         run: npm run build --if-present
-
-      # لو عندك tests
-      # - name: Run tests
-      #   run: npm test
 
       - name: Deploy to Azure WebApp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'bayan-webapp' # لازم يطابق اسم الـ Web App عندك بالبوابة
+          app-name: 'bayan-webapp'
           publish-profile: ${{ secrets.PUBPISH_PROFILE }}
           package: .
